@@ -12,8 +12,9 @@ def connect(db_name):
 # create
 def add_entry(db_name, entry):
   collection = connect(db_name)
-  collection.insert_one(entry)
+  id = collection.insert_one(entry)
   collection.database.client.close
+  return id
 
 # update
 def update_entry(db_name,id,update_entry):
@@ -45,3 +46,7 @@ def get_user_by(db_name, key,entry):
   if key == 'id':
     return collection.find_one({'_id': ObjectId(entry)})
   return collection.find_one({key: entry})
+
+def list_posts():
+  collection = connect('post')
+  return collection.find()
