@@ -1,13 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
 from user import user
+from post import post
+from app.settings import tags_metadata
 
-tags_metadata = [{
-                 'name': 'User Methods', 'description': 'Methods for users'
-}]
+
 
 app = FastAPI(openapi_tags=tags_metadata)
+
+
 app.include_router(user.user_router)
+app.include_router(post.post_router)
 
 @app.get('/')
 async def home():

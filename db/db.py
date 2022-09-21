@@ -6,7 +6,7 @@ import os
 # start connection
 def connect(db_name):
   client = MongoClient(os.environ['MONGODB_URI'])
-  collection = client.test[db_name]
+  collection = client.insta[db_name]
   return collection
   
 # create
