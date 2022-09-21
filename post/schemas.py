@@ -16,4 +16,4 @@ class PostDisplay(BaseModel):
   image_url_type: str  #relative or absolute
   caption: str
   timestamp: datetime
-  user: User
+  username: str

@@ -12,7 +12,7 @@ def connect(db_name):
 # create
 def add_entry(db_name, entry):
   collection = connect(db_name)
-  id = collection.insert_one(entry)
+  id = collection.insert_one(dict(entry)).inserted_id
   collection.database.client.close
   return id
 
@@ -48,5 +48,11 @@ def get_user_by(db_name, key,entry):
   return collection.find_one({key: entry})
 
 def list_posts():
+  #remove id from output
+  filter = {'_id': 0}
   collection = connect('post')
-  return collection.find()
+  return collection.find({},filter)
+
+def update_user_post(post_id,user_id):
+  collection = connect('user')
+  collection.update_one({'_id': ObjectId(user_id)},{'$push': {'posts': post_id}})
