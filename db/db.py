@@ -57,7 +57,7 @@ def update_user_post(post_id,user_id):
 
 def delete_post_from_user(post_id,user_id):
   collection = connect('user')
-  collection.update(({'_id': ObjectId(user_id)},{'$pull': {'posts': post_id}})
+  collection.update_one({'_id': ObjectId(user_id)},{'$pull': {'posts': ObjectId(post_id)}})
 
 def get_post_user(post_id):
   collection = connect('user')

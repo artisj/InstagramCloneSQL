@@ -63,6 +63,7 @@ async def delete_post(id: str,user: dict = Depends(authorize)):
     raise HTTPException(status_code=404, detail='Post not found.')
   
   username = db.get_post_user(id)
+  print(username)
   if username == None:
     raise HTTPException(status_code=404, detail='Post not found for user') 
 
