@@ -59,7 +59,7 @@ async def upload_image(image: UploadFile = File(...),user: dict = Depends(author
 
 @post_router.delete('/delete/{id}', summary='Delete post')
 async def delete_post(id: str,user: dict = Depends(authorize)):
-  if not post_id:
+  if not id:
     raise HTTPException(status_code=404, detail='Post not found.')
   
   username = db.get_post_user(id)
