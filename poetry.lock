@@ -1,4 +1,12 @@
 [[package]]
+name = "aiofiles"
+version = "22.1.0"
+description = "File support for asyncio."
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "anyio"
 version = "3.6.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -620,9 +628,10 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.9"
-content-hash = "22f96d8c6ef058d5f3dfc92df7cfec369b4025891db5a47439f2fa32d9869bf1"
+content-hash = "147f753dd37512c20752620304261c0140193e1243b6b5a59d424ecd27aafd6b"
 
 [metadata.files]
+aiofiles = []
 anyio = []
 attrs = []
 bcrypt = []

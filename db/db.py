@@ -48,11 +48,18 @@ def get_user_by(db_name, key,entry):
   return collection.find_one({key: entry})
 
 def list_posts():
-  #remove id from output
-  filter = {'_id': 0}
   collection = connect('post')
-  return collection.find({},filter)
+  return collection.find()
 
 def update_user_post(post_id,user_id):
   collection = connect('user')
   collection.update_one({'_id': ObjectId(user_id)},{'$push': {'posts': post_id}})
+
+def delete_post_from_user(post_id,user_id):
+  collection = connect('user')
+  collection.update(({'_id': ObjectId(user_id)},{'$pull': {'posts': post_id}})
+
+def get_post_user(post_id):
+  collection = connect('user')
+  found = collection.find_one({'posts':  ObjectId(post_id)})
+  return found['username']

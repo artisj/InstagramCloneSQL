@@ -3,12 +3,12 @@ from fastapi import FastAPI
 from user import user
 from post import post
 from app.settings import tags_metadata
-
+from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI(openapi_tags=tags_metadata)
 
-
+app.mount('/images', StaticFiles(directory='images'), name='images')
 app.include_router(user.user_router)
 app.include_router(post.post_router)
 
