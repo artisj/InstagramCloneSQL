@@ -71,7 +71,5 @@ async def login(request: OAuth2PasswordRequestForm = Depends(),db: Session = Dep
 
 # add dependency get_current_user to protect route
 @user_router.get("/users/me/")
-async def read_users_me(user: dict = Depends(authorize)):
-    return user
-#aj@gmail.com
-#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjE4ODUzNzcsImlkIjoiNjMwZTI3MGFhMWI2MmFhNmY4NDM3MDAwIn0.cZjD-03pNzhoV9tJTJQe54pTzoYxO3Mk3oGKLvgFs18
+async def read_users_me(user: dict = Depends(authorize),db: Session = Depends(get_db)):
+    return db_user.get_user_by_username(db, user.username)

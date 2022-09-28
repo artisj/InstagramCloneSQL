@@ -1,0 +1,12 @@
+uvicorn
+python-jose
+pydantic
+passlib
+python-multipart
+pytest
+bcrypt
+aiofiles
+black
+SQLAlchemy
+pydantic[email]
+python-dotenv

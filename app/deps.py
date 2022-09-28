@@ -5,36 +5,39 @@ from fastapi.security import OAuth2PasswordBearer
 from .utils import (ALGORITHM, JWT_SECRET_KEY)
 
 from jose import JWTError, jwt
-from db import db
+from db import db_user
 
+from db.database import get_db
+from sqlalchemy.orm.session import Session
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 
-async def authorize(token: str = Depends(oauth2_scheme)):
+async def authorize(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
   credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="Could not validate your credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
-  try:     
+  try:  
+  
     payload = jwt.decode(token,JWT_SECRET_KEY,algorithms=ALGORITHM)
     id = payload.get("id")
-    username = payload.get("username")
-
+    uname = str(payload.get("username"))
+    print(f'id/user - {id} - {uname}')
     if id is None:
-      print('No Id')
+      
       raise credentials_exception
           #token_data = TokenData(username=username)
-  except JWTError:
+  except Exception:
     raise credentials_exception
-      #print('looking for id in db')
-  user = db.get_user_by('user', 'id', id)
+     
+  user = db_user.get_user_by_username(db, uname)
+  
   if user is None:
     print('user is none')
     raise credentials_exception
         
-      #return str(user['_id'])
-  return {'username': username,'id': id}
+      
+  return {'username': uname,'id': id}

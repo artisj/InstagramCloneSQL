@@ -21,3 +21,4 @@ class PostDisplay(BaseModel):
   user: User
   class Config():
     orm_mode = True
+
