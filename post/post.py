@@ -9,6 +9,9 @@ import random
 import string
 import shutil
 
+from db import db_post
+from db.database import get_db
+from sqlalchemy.orm.session import Session
 
 post_router = APIRouter(
   prefix='/post',
@@ -16,9 +19,9 @@ post_router = APIRouter(
 )
 image_url_types = ['absolute','relative']
 
-@post_router.post('/', summary="Create new post")
-async def create_post(request: schemas.PostBase, user: dict = Depends(authorize)):
-
+@post_router.post('', summary="Create new post")
+# async def create_post(request: schemas.PostBase, user: dict = Depends(authorize)):
+async def create(request: schemas.PostBase, user: dict = Depends(authorize), db: Session = Depends(get_db)):
   if not request.image_url_type in image_url_types:
     raise HTTPException(status_code=422, detail='Parameter image url type can only take values of absolute or relative.')
   
@@ -31,12 +34,12 @@ async def create_post(request: schemas.PostBase, user: dict = Depends(authorize)
   'username': user['username']
   } 
   
-  post_id = db.add_entry('post',new_post)
+  # post_id = db.add_entry('post',new_post)
    
   # add post id to user
-  db.update_user_post(post_id, user['id'])
+  # db.update_user_post(post_id, user['id'])
   
-  return new_post
+  return db_post.create(db, request)
 
 @post_router.get('/list', summary="List posts", response_model=List[schemas.PostDisplay])
 async def list_post():
@@ -68,7 +71,7 @@ async def delete_post(id: str,user: dict = Depends(authorize)):
     raise HTTPException(status_code=404, detail='Post not found for user') 
 
   if username != user['username']:
-    raise HTTPException(status_code=404, detail='Post matches another user') 
+    raise HTTPException(status_code=403, detail='Post matches another user') 
     
   # delete post from post  
   db.delete('post',id)

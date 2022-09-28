@@ -8,7 +8,9 @@ class User(BaseModel):
 
 class UserDisplay(BaseModel):
   username: str
-  email: str
+  email: EmailStr
+  class Config(): # convert orm to json
+    orm_mode = True
   
 class Token(BaseModel):
   access_token: str

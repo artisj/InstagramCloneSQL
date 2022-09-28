@@ -5,6 +5,10 @@ from post import post
 from app.settings import tags_metadata
 from fastapi.staticfiles import StaticFiles
 
+from db.database import engine
+
+from db import models
+
 
 app = FastAPI(openapi_tags=tags_metadata)
 
@@ -16,8 +20,12 @@ app.include_router(post.post_router)
 async def home():
   return 'Home'
 
+  
+models.Base.metadata.create_all(engine)
 #run on replit
 uvicorn.run(app,host="0.0.0.0",port=8080)
+
+
 
 #run from console
 #uvicorn main:app --host="0.0.0.0"
