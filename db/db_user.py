@@ -18,9 +18,6 @@ def create_user(db: Session, request: User):
 def view_users(db: Session):
   return db.query(DbUser).all()
 
-def user_login(db: Session,request: User):
-  pass
-
 def get_user_by_username(db: Session, username: str):
   user = db.query(DbUser).filter(DbUser.username == username).first()
 

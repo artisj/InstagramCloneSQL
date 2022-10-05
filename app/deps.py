@@ -25,7 +25,7 @@ async def authorize(token: str = Depends(oauth2_scheme), db: Session = Depends(g
     payload = jwt.decode(token,JWT_SECRET_KEY,algorithms=ALGORITHM)
     id = payload.get("id")
     uname = str(payload.get("username"))
-    print(f'id/user - {id} - {uname}')
+    
     if id is None:
       
       raise credentials_exception

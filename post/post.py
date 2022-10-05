@@ -19,7 +19,7 @@ post_router = APIRouter(
 )
 image_url_types = ['absolute','relative']
 
-@post_router.post('', summary="Create new post")
+@post_router.post('', summary="Create new post",response_model=schemas.PostDisplay)
 # async def create_post(request: schemas.PostBase, user: dict = Depends(authorize)):
 async def create(request: schemas.PostBase, user: dict = Depends(authorize), db: Session = Depends(get_db)):
   if not request.image_url_type in image_url_types:
@@ -28,9 +28,8 @@ async def create(request: schemas.PostBase, user: dict = Depends(authorize), db:
   return db_post.create_post(db, request)
 
 @post_router.get('/list', summary="List posts", response_model=List[schemas.PostDisplay])
-async def list_post():
-  posts = list(db.list_posts())
-  return posts
+async def list_post(db: Session = Depends(get_db)):
+  return db_post.view_posts(db)
 
 @post_router.post('/image', summary='Upload an image for post')
 async def upload_image(image: UploadFile = File(...),user: dict = Depends(authorize)):
@@ -46,22 +45,8 @@ async def upload_image(image: UploadFile = File(...),user: dict = Depends(author
 
   return {'filename': path}
 
-# @post_router.delete('/delete/{id}', summary='Delete post')
-# async def delete_post(id: str,user: dict = Depends(authorize)):
-#   if not id:
-#     raise HTTPException(status_code=404, detail='Post not found.')
-  
-#   username = db.get_post_user(id)
-#   print(username)
-#   if username == None:
-#     raise HTTPException(status_code=404, detail='Post not found for user') 
-
-#   if username != user['username']:
-#     raise HTTPException(status_code=403, detail='Post matches another user') 
-    
-#   # delete post from post  
-#   db.delete('post',id)
-
-#   # delete id from user
-#   db.delete_post_from_user(id,user['id'])
-#   return {'detail': f'Post {id} deleted'}
+@post_router.delete('/delete/{id}', summary='Delete post')
+async def delete_post(id: int,user: dict = Depends(authorize),db: Session = Depends(get_db)):
+  if not id:
+    raise HTTPException(status_code=404, detail='No post entered.')
+  return db_post.delete(db, id, user['id'])
