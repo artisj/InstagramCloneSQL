@@ -20,7 +20,7 @@ app.include_router(post.post_router)
 app.include_router(comment.router)
 
 origins = [
-  'http://localhost:3000'
+  'http://localhost:5173'
 ]
 
 app.add_middleware(
